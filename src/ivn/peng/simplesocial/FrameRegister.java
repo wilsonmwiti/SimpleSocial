@@ -13,6 +13,7 @@ import android.widget.EditText;
 import grandroid.action.GoAction;
 
 /**
+ * 注冊頁面 需要有即時檢測輸入訊息的功能
  *
  * @author Peng
  */
@@ -49,10 +50,6 @@ public class FrameRegister extends FaceSocial {
                 {
                     maker.add(createStyliseTextView("密碼", 1, Color.BLACK, Gravity.LEFT | Gravity.BOTTOM), maker.layFW(1));
                     et_ps1 = maker.add(createStyliseEditView("請輸入6-12位元的字母及數字", 0, Color.BLACK, Gravity.LEFT | Gravity.CENTER), maker.layFW(1));
-//                    maker.escape();
-//                }
-//                maker.addColLayout(false, maker.layFW(1)).setGravity(Gravity.CENTER);
-//                {
                     maker.add(createStyliseTextView("", 0, Color.BLACK, Gravity.LEFT | Gravity.BOTTOM), maker.layFW(1));
                     et_ps2 = maker.add(createStyliseEditView("請再輸入一次密碼", 0, Color.BLACK, Gravity.LEFT | Gravity.CENTER), maker.layFW(1));
                     maker.escape();
@@ -81,9 +78,15 @@ public class FrameRegister extends FaceSocial {
                 ;
                 // 註冊
                 ;
-                
+
                 new GoAction(FrameRegister.this, FrameContent.class).execute();
+                finish();
             }
         });
+    }
+
+    @Override
+    public boolean hasMenu() {
+        return false;
     }
 }

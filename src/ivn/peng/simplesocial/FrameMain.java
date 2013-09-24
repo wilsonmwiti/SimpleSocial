@@ -70,9 +70,11 @@ public class FrameMain extends FaceSocial {
             public void onClick(View view) {
                 // 帳號密碼檢查
                 ;
-                
-                
+                // 載入舊有資料
+                ;
+
                 new GoAction(FrameMain.this, FrameContent.class).execute();
+                finish();
             }
         });
         ll_register.setOnClickListener(new View.OnClickListener() {
@@ -81,5 +83,10 @@ public class FrameMain extends FaceSocial {
             }
         });
 
+    }
+
+    @Override
+    public boolean hasMenu() {
+        return false;
     }
 }
