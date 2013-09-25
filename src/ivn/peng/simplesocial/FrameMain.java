@@ -8,7 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import grandroid.action.GoAction;
+import grandroid.database.FaceData;
+import grandroid.database.GenericHelper;
 
 /**
  * 首頁。 登入 或選擇註冊新帳號
@@ -66,7 +69,7 @@ public class FrameMain extends FaceSocial {
             }
             maker.escape();
         }
-        
+
         et_password.setTransformationMethod(PasswordTransformationMethod.getInstance());
         if (getData().getPreference(Config.ACCOUNT) != null && !getData().getPreference(Config.ACCOUNT).equals("")) {
             et_account.setText(getData().getPreference(Config.ACCOUNT));
@@ -75,16 +78,32 @@ public class FrameMain extends FaceSocial {
 
         bn_login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                getData().putPreference(Config.ACCOUNT, et_account.getText().toString());
-                getData().putPreference(Config.PASSWORD, et_password.getText().toString());
-                
                 // 帳號密碼檢查
                 ;
-                // 載入舊有資料
-                ;
+                // 假資料
+                //  admin
+                //  admin123
+                if (et_account.getText().toString().equals("admin") && et_password.getText().toString().equals("admin123")) {
+                    // 載入舊有資料
+                    ;
 
-                new GoAction(FrameMain.this, FrameContent.class).execute();
-                finish();
+                    getData().putPreference(Config.ACCOUNT, et_account.getText().toString());
+                    getData().putPreference(Config.PASSWORD, et_password.getText().toString());
+
+                    // 假資料
+                    // 基本資料
+                    getData().putPreference(Config.NAME, "小小兵");
+                    getData().putPreference(Config.PHOTO_FILE, "http://4.bp.blogspot.com/-O6vpzzEkhCM/UdT75Pjrt9I/AAAAAAAAkoE/7PCnALll5DA/s1600/20001.jpg");
+                    // 朋友資料
+//                    FaceData fd = new FaceData(FrameMain.this, Config.DB_NAME);
+//                    GenericHelper<Friend> helperFriend = new GenericHelper<Friend>(fd, null)
+                    
+                    new GoAction(FrameMain.this, FrameContent.class).execute();
+                    finish();
+                } else {
+                    Toast.makeText(FrameMain.this, "帳號密碼錯誤", Toast.LENGTH_LONG).show();
+                    et_password.setText("");
+                }
             }
         });
         ll_register.setOnClickListener(new View.OnClickListener() {
