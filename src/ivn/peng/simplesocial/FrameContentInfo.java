@@ -7,14 +7,20 @@ package ivn.peng.simplesocial;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
- * 
+ *
  *
  * @author Peng
  */
 public class FrameContentInfo extends FaceSocial {
+
+    EditText et_msng;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -22,7 +28,7 @@ public class FrameContentInfo extends FaceSocial {
 
         addTopBanner();
 
-        maker.addColLayout(false, maker.layFF());
+        maker.addColLayout(false, maker.layFW(1));
         maker.setScalablePadding(maker.getLastLayout(), 50, 50, 50, 50);
         {
             maker.addRowLayout(false, maker.layFW());
@@ -60,11 +66,31 @@ public class FrameContentInfo extends FaceSocial {
                 }
                 maker.escape();
             }
+
+            maker.addRowLayout(false, maker.layFW(0));
+            {
+                et_msng = maker.add(createStyliseEditView("在此輸入訊息", 1, Color.BLACK, Gravity.LEFT | Gravity.CENTER), maker.layFW());
+                maker.escape();
+            }
             maker.escape();
         }
+        addButtomBanner(2);
+        
+        et_msng.setOnKeyListener(new View.OnKeyListener() {
 
+            public boolean onKey(View view, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                        et_msng.setText("");
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
-      @Override
+
+    @Override
     public boolean hasMenu() {
         return true;
     }

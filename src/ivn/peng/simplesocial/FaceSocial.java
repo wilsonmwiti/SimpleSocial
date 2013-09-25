@@ -4,8 +4,13 @@
  */
 package ivn.peng.simplesocial;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -15,6 +20,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import grandroid.action.GoAction;
+import grandroid.dialog.CommandPickModel;
 import grandroid.phone.DisplayAgent;
 import grandroid.slidemenu.SlidingMenu;
 import grandroid.view.Face;
@@ -52,10 +58,16 @@ public abstract class FaceSocial extends Face {
     }
 
     public abstract boolean hasMenu();
+    LinearLayout layout_list, layout_search, layout_add;
 
     protected void createSideMenuLayout() {
         TextView tv_name, tv_edit;
         Button btn_list, btn_search, btn_add;
+
+        EditText et_search, et_add;
+        Button btn_add_ok;
+
+        TextView tv_temp;
 //        LayoutMaker lm_side = new LayoutMaker(this);
 //        lm_side.setDrawableDesignWidth(this, 952);
 //        lm_side.setAutoScaleResource(true);
@@ -64,30 +76,116 @@ public abstract class FaceSocial extends Face {
         lm_side.addColLayout(false, lm_side.layFF());
         lm_side.setScalablePadding(lm_side.getLastLayout(), 40, 40, 40, 40);
         {
-            lm_side.addColLayout(false, lm_side.layFW(1));
-            lm_side.getLastLayout().setBackgroundColor(Color.GRAY);
+            lm_side.addColLayout(false, lm_side.layFW(0));
+//            lm_side.getLastLayout().setBackgroundColor(Color.GRAY);
+            lm_side.setScalablePadding(lm_side.getLastLayout(), 100, 20, 100, 40);
             {
                 tv_name = lm_side.add(createStyliseTextView(getData().getPreference(Config.NAME, "彭小柔"), 2, Color.BLACK), lm_side.layFW());
 //                addBrock(0, 0, 440, 440, Color.RED);
+                lm_side.addColLayout(false, maker.layAbsolute(0, 0, 330, 330));
+                lm_side.getLastLayout().setBackgroundColor(Color.RED);
+                lm_side.escape();
                 tv_edit = lm_side.add(createStyliseTextView("修改資料", 0, Color.BLACK, Gravity.RIGHT), lm_side.layFW());
                 lm_side.escape();
             }
-            lm_side.addColLayout(false, lm_side.layFW(3)).setGravity(Gravity.CENTER | Gravity.TOP);
+
+            lm_side.addColLayout(false, lm_side.layAbsolute(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, 2));
+            lm_side.getLastLayout().setBackgroundColor(Color.GRAY);
+            lm_side.escape();
+
+            lm_side.addColLayout(false, lm_side.layFW(1)).setGravity(Gravity.CENTER | Gravity.TOP);
             lm_side.setScalablePadding(lm_side.getLastLayout(), 40, 40, 40, 40);
             {
-                btn_list = lm_side.addButton("朋友列表");
-                btn_search = lm_side.addButton("搜尋朋友");
-                btn_add = lm_side.addButton("新增好友");
+                btn_list = lm_side.add(lm_side.createButton("朋友列表"), lm_side.layFW());
+                layout_list = lm_side.addColLayout();
+                layout_list.setGravity(Gravity.CENTER_HORIZONTAL);
+                {
+                    // 朋友列表
+                    tv_temp = lm_side.add(createStyliseTextView("好友1號", 1, Color.BLACK, Gravity.CENTER), lm_side.layFW());
+                    ;
+
+                    lm_side.escape();
+                }
+                btn_search = lm_side.add(lm_side.createButton("搜尋朋友"), lm_side.layFW());
+                layout_search = lm_side.addColLayout();
+//                layout_search.setGravity(Gravity.CENTER_VERTICAL);
+                {
+                    et_search = lm_side.add(createStyliseEditView("", 1, Color.BLACK), lm_side.layFW());
+                    lm_side.add(createStyliseTextView("請輸入好友的姓名或ID來搜尋", 0, Color.GRAY), lm_side.layFW());
+                    // 搜尋結果顯示
+                    ;
+
+                    lm_side.escape();
+                }
+                btn_add = lm_side.add(lm_side.createButton("新增好友"), lm_side.layFW());
+                layout_add = lm_side.addColLayout();
+//                layout_add.setGravity(Gravity.CENTER_VERTICAL);
+                {
+                    et_add = lm_side.add(createStyliseEditView("", 1, Color.BLACK), lm_side.layFW());
+                    lm_side.add(createStyliseTextView("請輸入好友ID來新增好友", 0, Color.GRAY), lm_side.layFW());
+                    btn_add_ok = lm_side.add(lm_side.createButton("新增"), lm_side.layWW(0));
+                    lm_side.escape();
+                }
                 lm_side.escape();
             }
             lm_side.escape();
         }
+        btn_list.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                layout_list.setVisibility(View.VISIBLE);
+                layout_search.setVisibility(View.GONE);
+                layout_add.setVisibility(View.GONE);
+            }
+        });
+        tv_temp.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                new GoAction(FaceSocial.this, FrameContentInfo.class).execute();
+            }
+        });
+        layout_list.setVisibility(View.GONE);
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                layout_list.setVisibility(View.GONE);
+                layout_search.setVisibility(View.VISIBLE);
+                layout_add.setVisibility(View.GONE);
+            }
+        });
+        et_search.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+//                Log.d(Config.TAG, "after text change");
+//                search(s.toString());
+            }
 
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                Log.d(Config.TAG, "before text change");
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                Log.d(Config.TAG, "on text change");
+            }
+        });
+        layout_search.setVisibility(View.GONE);
+
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                layout_list.setVisibility(View.GONE);
+                layout_search.setVisibility(View.GONE);
+                layout_add.setVisibility(View.VISIBLE);
+            }
+        });
+        btn_add_ok.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                // 新增好友
+                ;
+            }
+        });
+        layout_add.setVisibility(View.GONE);
         tv_edit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 new GoAction(FaceSocial.this, FrameEdit.class).execute();
             }
         });
+
     }
 
     protected LinearLayout addLine(int x, int y, int w, int h, int color) {
@@ -222,19 +320,110 @@ public abstract class FaceSocial extends Face {
 
     }
 
-    /* (non-Javadoc)
-     * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
+    public AlertDialog.Builder alertDialog(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(FaceSocial.this);
+        builder.setMessage(message);
+        builder.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        return builder;
+    }
+    Button btn_fl, btn_tolk, btn_config;
+
+    public void addButtomBanner(int frame) {
+
+
+        maker.addRowLayout(false, maker.layFW());
+        maker.getLastLayout().setBackgroundColor(Color.GRAY);
+        {
+            btn_fl = maker.add(maker.createButton("好友"), maker.layWF(1));
+            btn_fl.setBackgroundColor(Color.GRAY);
+            btn_tolk = maker.add(maker.createButton("近聊"), maker.layWF(1));
+            btn_tolk.setBackgroundColor(Color.GRAY);
+            btn_config = maker.add(maker.createButton("設定"), maker.layWF(1));
+            btn_config.setBackgroundColor(Color.GRAY);
+            maker.escape();
+        }
+        if (frame == 1) {
+            btn_fl.setBackgroundColor(Color.BLACK);
+            btn_fl.setClickable(false);
+        } else if (frame == 2) {
+            btn_tolk.setBackgroundColor(Color.BLACK);
+            btn_tolk.setClickable(false);
+        }
+
+        btn_fl.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                new GoAction(FaceSocial.this, FrameContent.class).setFlag(Intent.FLAG_ACTIVITY_CLEAR_TOP).execute();
+            }
+        });
+
+        btn_tolk.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                new GoAction(FaceSocial.this, FrameContentInfo.class).setFlag(Intent.FLAG_ACTIVITY_CLEAR_TOP).addBundleObject("target", getData().getPreference(Config.LAST_TARGET)).execute();
+            }
+        });
+
+        btn_config.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                btn_config.setBackgroundColor(Color.BLACK);
+                String[] choseWay = {
+                    "登出", "結束連線", "取消"
+                };
+                pickObject(new CommandPickModel("", choseWay) {
+                    @Override
+                    public void onCommand(int i) {
+                        switch (i) {
+                            case 0:
+                                logout();
+                                break;
+                            case 1:
+                                // 結束連線
+                                ;
+                                FaceSocial.this.finishActivity(0);
+                                break;
+                            case 2:
+                                btn_config.setBackgroundColor(Color.GRAY);
+                                break;
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void logout() {
+        // 清空所有資料
+        getData().putPreference(Config.ACCOUNT, "");
+        getData().putPreference(Config.PASSWORD, "");
+        getData().putPreference(Config.EMAIL, "");
+        getData().putPreference(Config.PHOTO_FILE, "");
+        getData().putPreference(Config.NAME, "");
+        getData().putPreference(Config.PHOTO_URL, "");
+        getData().putPreference(Config.LAST_TARGET, "");
+
+        new GoAction(FaceSocial.this, FrameMain.class).setFlag(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK).execute();
+    }
+
+    /*
+     * (non-Javadoc) @see android.app.Activity#onKeyDown(int,
+     * android.view.KeyEvent)
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
 //            Log.d(Config.TAG, "MENU pressed");
-            if (state == 0) {
-                smenu.showMenu();
-                state = 1;
-            } else if (state == 1) {
-                smenu.showContent();
-                state = 0;
+            if (hasMenu()) {
+                if (state == 0) {
+                    smenu.showMenu();
+                    state = 1;
+                } else if (state == 1) {
+                    smenu.showContent();
+                    state = 0;
+                }
             }
             return true;
         }

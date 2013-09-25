@@ -65,7 +65,7 @@ public class FrameRegister extends FaceSocial {
             maker.addColLayout(false, maker.layFW(1)).setGravity(Gravity.CENTER);
             maker.setScalablePadding(maker.getLastLayout(), 50, 50, 50, 50);
             {
-                btn_ok = maker.add(maker.createButton("登入"), maker.layFW(1));
+                btn_ok = maker.add(maker.createButton("註冊"), maker.layFW(1));
                 btn_ok.setGravity(Gravity.CENTER);
                 maker.escape();
             }
