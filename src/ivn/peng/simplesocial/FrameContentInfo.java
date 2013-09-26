@@ -28,7 +28,7 @@ public class FrameContentInfo extends FaceSocial {
 
         addTopBanner();
 
-        maker.addColLayout(false, maker.layFW(1));
+        LinearLayout lv = maker.addColLayout(false, maker.layFW(1));
         maker.setScalablePadding(maker.getLastLayout(), 50, 50, 50, 50);
         {
             maker.addRowLayout(false, maker.layFW());
@@ -75,9 +75,12 @@ public class FrameContentInfo extends FaceSocial {
             maker.escape();
         }
         addButtomBanner(2);
-        
-        et_msng.setOnKeyListener(new View.OnKeyListener() {
 
+        lv.setFocusable(true);
+        lv.setFocusableInTouchMode(true);
+        lv.requestFocus();
+
+        et_msng.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyCode == KeyEvent.KEYCODE_ENTER) {

@@ -11,16 +11,24 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import grandroid.action.GoAction;
+import grandroid.cache.ImageCacher;
+import grandroid.cache.lazyloader.ImageLoader;
+import grandroid.database.FaceData;
 import grandroid.dialog.CommandPickModel;
+import grandroid.image.ImageUtil;
+import grandroid.image.PhotoAgent;
+import grandroid.image.PhotoHandler;
 import grandroid.phone.DisplayAgent;
 import grandroid.slidemenu.SlidingMenu;
 import grandroid.view.Face;
@@ -37,8 +45,11 @@ public abstract class FaceSocial extends Face {
     protected LayoutMaker maker;
     protected DisplayAgent da;
     protected SlidingMenu smenu;
-    protected int state; // 0： 主頁　１：ｓｉｄｅＭｅｎｕ
+    protected int state; // 0： 主頁　１：ｓｉｄｅＭｅｎｕ      2: config
     LayoutMaker lm_side;
+    ImageLoader loader;
+    ImageCacher cacher;
+    FaceData fd;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -48,7 +59,9 @@ public abstract class FaceSocial extends Face {
         maker.setAutoScaleResource(true);
         maker.getLastLayout().setBackgroundColor(Color.WHITE);
         da = maker.getDisplayAgent();
-
+        cacher = new ImageCacher(this, Config.DB_NAME_IMAGE);
+        loader = new ImageLoader(this, cacher, 0);
+        fd = new FaceData(FaceSocial.this, Config.DB_NAME);
         if (hasMenu()) {
             smenu = new SlidingMenu(this);
             lm_side = smenu.createLeftMenuMaker();
@@ -63,11 +76,14 @@ public abstract class FaceSocial extends Face {
     protected void createSideMenuLayout() {
         TextView tv_name, tv_edit;
         Button btn_list, btn_search, btn_add;
-
+        ImageView iv_photo;
         EditText et_search, et_add;
         Button btn_add_ok;
 
         TextView tv_temp;
+
+        loader = new ImageLoader(this, cacher, 330, 330, Color.GRAY);
+
 //        LayoutMaker lm_side = new LayoutMaker(this);
 //        lm_side.setDrawableDesignWidth(this, 952);
 //        lm_side.setAutoScaleResource(true);
@@ -80,11 +96,8 @@ public abstract class FaceSocial extends Face {
 //            lm_side.getLastLayout().setBackgroundColor(Color.GRAY);
             lm_side.setScalablePadding(lm_side.getLastLayout(), 100, 20, 100, 40);
             {
-                tv_name = lm_side.add(createStyliseTextView(getData().getPreference(Config.NAME, "彭小柔"), 2, Color.BLACK), lm_side.layFW());
-//                addBrock(0, 0, 440, 440, Color.RED);
-                lm_side.addColLayout(false, maker.layAbsolute(0, 0, 330, 330));
-                lm_side.getLastLayout().setBackgroundColor(Color.RED);
-                lm_side.escape();
+                tv_name = lm_side.add(createStyliseTextView(getData().getPreference(Config.NAME), 2, Color.BLACK), lm_side.layFW());
+                iv_photo = lm_side.addImage(0, lm_side.layAbsolute(0, 0, 330, 330));
                 tv_edit = lm_side.add(createStyliseTextView("修改資料", 0, Color.BLACK, Gravity.RIGHT), lm_side.layFW());
                 lm_side.escape();
             }
@@ -130,6 +143,40 @@ public abstract class FaceSocial extends Face {
             }
             lm_side.escape();
         }
+        iv_photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        if (getData().getPreference(Config.PHOTO_FILE).subSequence(0, 4).equals("http")) {
+            Log.d(Config.TAG, "load photo from net");
+            loader.displayImage(getData().getPreference(Config.PHOTO_FILE), iv_photo, new PhotoHandler() {
+                public void execute(PhotoAgent pa) {
+                    pa.square(1f);
+                    pa.fixSize(330, 330);
+                }
+            });
+        } else {
+            Log.d(Config.TAG, "load photo from sdcard");
+            try {
+                iv_photo.setImageBitmap(ImageUtil.loadBitmap(getData().getPreference(Config.PHOTO_FILE)));
+            } catch (Exception ex) {
+                Log.e(Config.TAG, null, ex);
+            }
+        }
+
+        iv_photo.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                new GoAction(FaceSocial.this, FrameEdit.class).addBundleObject("focus", "photo").execute();
+            }
+        });
+        tv_name.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                new GoAction(FaceSocial.this, FrameEdit.class).addBundleObject("focus", "name").execute();
+            }
+        });
+        tv_edit.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                new GoAction(FaceSocial.this, FrameEdit.class).addBundleObject("focus", "none").execute();
+            }
+        });
+
         btn_list.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
                 layout_list.setVisibility(View.VISIBLE);
@@ -180,11 +227,6 @@ public abstract class FaceSocial extends Face {
             }
         });
         layout_add.setVisibility(View.GONE);
-        tv_edit.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                new GoAction(FaceSocial.this, FrameEdit.class).execute();
-            }
-        });
 
     }
 
@@ -332,10 +374,9 @@ public abstract class FaceSocial extends Face {
         return builder;
     }
     Button btn_fl, btn_tolk, btn_config;
+    CommandPickModel cpm;
 
     public void addButtomBanner(int frame) {
-
-
         maker.addRowLayout(false, maker.layFW());
         maker.getLastLayout().setBackgroundColor(Color.GRAY);
         {
@@ -348,10 +389,10 @@ public abstract class FaceSocial extends Face {
             maker.escape();
         }
         if (frame == 1) {
-            btn_fl.setBackgroundColor(Color.BLACK);
+            btn_fl.setBackgroundColor(Color.WHITE);
             btn_fl.setClickable(false);
         } else if (frame == 2) {
-            btn_tolk.setBackgroundColor(Color.BLACK);
+            btn_tolk.setBackgroundColor(Color.WHITE);
             btn_tolk.setClickable(false);
         }
 
@@ -369,11 +410,16 @@ public abstract class FaceSocial extends Face {
 
         btn_config.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-                btn_config.setBackgroundColor(Color.BLACK);
+                state = 2;
+//                btn_fl.setBackgroundColor(Color.GRAY);
+//                btn_fl.setClickable(true);
+//                btn_tolk.setBackgroundColor(Color.GRAY);
+//                btn_tolk.setClickable(true);
+//                btn_config.setBackgroundColor(Color.WHITE);
                 String[] choseWay = {
                     "登出", "結束連線", "取消"
                 };
-                pickObject(new CommandPickModel("", choseWay) {
+                cpm = (new CommandPickModel("", choseWay) {
                     @Override
                     public void onCommand(int i) {
                         switch (i) {
@@ -386,11 +432,13 @@ public abstract class FaceSocial extends Face {
                                 FaceSocial.this.finishActivity(0);
                                 break;
                             case 2:
-                                btn_config.setBackgroundColor(Color.GRAY);
+                                state = 0;
+//                                btn_config.setBackgroundColor(Color.GRAY);
                                 break;
                         }
                     }
                 });
+                pickObject(cpm);
             }
         });
     }
@@ -432,6 +480,11 @@ public abstract class FaceSocial extends Face {
 
     @Override
     public void onBackPressed() {
+        if (state == 2) {
+            cpm.onCommand(2);
+//            state = 0;
+//            btn_config.setBackgroundColor(Color.GRAY);
+        }
         if (state == 1) {
             state = 0;
             smenu.showContent();

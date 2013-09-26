@@ -4,26 +4,27 @@
  */
 package ivn.peng.simplesocial;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import grandroid.action.GoAction;
+import android.widget.LinearLayout;
 import grandroid.action.PhotoAction;
 import grandroid.action.PickPhotoAction;
-import grandroid.cache.ImageCacher;
 import grandroid.cache.lazyloader.ImageLoader;
 import grandroid.dialog.CommandPickModel;
+import grandroid.image.ImageUtil;
 import grandroid.image.PhotoAgent;
 import grandroid.image.PhotoHandler;
-import grandroid.phone.DisplayAgent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * 修改個人資訊
@@ -34,30 +35,21 @@ public class FrameEdit extends FaceSocial {
 
     EditText et_id, et_psold, et_ps1, et_ps2, et_email, et_name;
     protected ImageView photoView;
-    ImageLoader loader;
-    ImageCacher cacher;
+    String focus;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         Button btn_base, btn_password, btn_info;
 
-        addTopBanner("註冊", false);
+        loader = new ImageLoader(this, cacher, 660, 660, Color.GRAY);
 
-        cacher = new ImageCacher(this, Config.DB_NAME_IMAGE);
-        loader = new ImageLoader(this, cacher, 0);
-
-        maker.addColLayout(true, maker.layFW(1)).setGravity(Gravity.CENTER);
-        maker.setScalablePadding(maker.getLastLayout(), 50, 50, 50, 50);
+        addTopBanner("修改資料", false);
+        LinearLayout lv = maker.addColLayout(true, maker.layFW(1));
+        lv.setGravity(Gravity.CENTER);
+        maker.setScalablePadding(lv, 50, 50, 50, 50);
         {
             photoView = maker.addImage(0, maker.layAbsolute(0, 0, 660, 660));
-            photoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            loader.displayImage(getData().getPreference(Config.PHOTO_FILE), photoView, new PhotoHandler() {
-                public void execute(PhotoAgent pa) {
-                    pa.square(1f);
-                }
-            });
-
             maker.addColLayout(false, maker.layFW(1));
             maker.setScalablePadding(maker.getLastLayout(), 50, 50, 50, 50);
             {
@@ -90,18 +82,53 @@ public class FrameEdit extends FaceSocial {
         }
         addButtomBanner(0);
 
+        Bundle bundle = this.getIntent().getExtras();
+        focus = bundle.getString("focus");
+        if (focus.equals("name")) {
+            et_name.requestFocus();
+//        } else if (focus.equals("photo")) {
+//            photoView.requestFocus();
+        } else {
+            lv.setFocusable(true);
+            lv.setFocusableInTouchMode(true);
+            lv.requestFocus();
+        }
+
+        Log.d(Config.TAG, "get photo " + getData().getPreference(Config.PHOTO_FILE));
+        photoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        if (getData().getPreference(Config.PHOTO_FILE).subSequence(0, 4).equals("http")) {
+            Log.d(Config.TAG, "load photo from net");
+            loader.displayImage(getData().getPreference(Config.PHOTO_FILE), photoView, new PhotoHandler() {
+                public void execute(PhotoAgent pa) {
+                    pa.square(1f);
+                    pa.fixSize(660, 660);
+                }
+            });
+        } else {
+            Log.d(Config.TAG, "load photo from sdcard");
+            try {
+                photoView.setImageBitmap(ImageUtil.loadBitmap(getData().getPreference(Config.PHOTO_FILE)));
+            } catch (Exception ex) {
+                Log.e(Config.TAG, null, ex);
+            }
+        }
+
         et_id.setText(getData().getPreference(Config.ACCOUNT));
-        et_id.setClickable(false);
-        et_id.setFocusable(false);
-        et_id.setEnabled(false);
+        et_id.setClickable(
+                false);
+        et_id.setFocusable(
+                false);
+        et_id.setEnabled(
+                false);
         et_name.setText(getData().getPreference(Config.NAME));
         et_email.setText(getData().getPreference(Config.EMAIL));
 
         et_ps1.setTransformationMethod(PasswordTransformationMethod.getInstance());
         et_ps2.setTransformationMethod(PasswordTransformationMethod.getInstance());
         et_psold.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        
-        btn_base.setOnClickListener(new View.OnClickListener() {
+
+        btn_base.setOnClickListener(
+                new View.OnClickListener() {
             public void onClick(View view) {
                 getData().putPreference(Config.NAME, et_name.getText().toString());
                 getData().putPreference(Config.EMAIL, et_email.getTag().toString());

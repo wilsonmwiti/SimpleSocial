@@ -23,5 +23,6 @@ public class Config {
     public final static String ACCOUNT = "account";
     public final static String PHOTO_FILE = "photo_file";
     public final static String PHOTO_URL = "photo_url";
+    public final static String IS_LOGIN = "is_login";
     public final static String LAST_TARGET = "last_targer";
 }

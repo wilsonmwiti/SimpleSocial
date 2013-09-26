@@ -18,8 +18,15 @@ public class Friend implements Identifiable {
     protected String account;//	朋友id	{ String }
     protected String name;//姓名	{ String }
     protected String url;//照片url	{ String }
-    protected String is_best;
+    protected String is_best;   // Y | N
 
+    public Friend(String account, String name, String url, String is_best) {
+        this.account = account;
+        this.name = name;
+        this.url = url;
+        this.is_best = is_best;
+    }
+    
     public Integer get_id() {
         return this._id;
     }
