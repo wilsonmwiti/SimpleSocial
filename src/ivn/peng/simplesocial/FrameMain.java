@@ -77,17 +77,7 @@ public class FrameMain extends FaceSocial {
         }
 
         if (getData().getPreference(Config.IS_LOGIN) != null && getData().getPreference(Config.IS_LOGIN).equals("true")) {
-            // 載入舊有資料
-            getData().putPreference(Config.NAME, "小小兵");
-            getData().putPreference(Config.PHOTO_FILE, "http://4.bp.blogspot.com/-O6vpzzEkhCM/UdT75Pjrt9I/AAAAAAAAkoE/7PCnALll5DA/s1600/20001.jpg");
-            // 朋友資料
-            GenericHelper<Friend> helperFriend = new GenericHelper<Friend>(fd, Friend.class);
-
-            helperFriend.insert(new Friend("0000", "小小兵2號", "http://stars.udn.com/starimages/slide/213834/M_213842-DM2_Minion_Bob_005.jpg", "Y"));
-            helperFriend.insert(new Friend("0001", "海棉寶寶", "http://7.blog.xuite.net/7/9/0/9/17804467/blog_855626/txt/24861275/9.jpg", "N"));
-            helperFriend.insert(new Friend("0002", "派大星", "http://f.blog.xuite.net/f/d/0/1/23861562/blog_2024565/txt/32906143/0.jpg", "N"));
-            helperFriend.close();
-            ;
+            reloadAll();
             Toast.makeText(this, "已登入", Toast.LENGTH_SHORT).show();
             new GoAction(FrameMain.this, FrameContent.class).execute();
             finish();
@@ -110,17 +100,7 @@ public class FrameMain extends FaceSocial {
                         getData().putPreference(Config.ACCOUNT, et_account.getText().toString());
                         getData().putPreference(Config.PASSWORD, et_password.getText().toString());
 
-                        // 假資料
-                        // 基本資料
-                        getData().putPreference(Config.NAME, "小小兵");
-                        getData().putPreference(Config.PHOTO_FILE, "http://4.bp.blogspot.com/-O6vpzzEkhCM/UdT75Pjrt9I/AAAAAAAAkoE/7PCnALll5DA/s1600/20001.jpg");
-                        // 朋友資料
-                        GenericHelper<Friend> helperFriend = new GenericHelper<Friend>(fd, Friend.class);
-
-                        helperFriend.insert(new Friend("0000", "小小兵2號", "http://stars.udn.com/starimages/slide/213834/M_213842-DM2_Minion_Bob_005.jpg", "Y"));
-                        helperFriend.insert(new Friend("0001", "海棉寶寶", "http://7.blog.xuite.net/7/9/0/9/17804467/blog_855626/txt/24861275/9.jpg", "N"));
-                        helperFriend.insert(new Friend("0002", "派大星", "http://f.blog.xuite.net/f/d/0/1/23861562/blog_2024565/txt/32906143/0.jpg", "N"));
-                        helperFriend.close();
+                        reloadAll();
 
                         getData().putPreference(Config.IS_LOGIN, "true");
                         new GoAction(FrameMain.this, FrameContent.class).execute();
@@ -138,6 +118,21 @@ public class FrameMain extends FaceSocial {
             }
         });
 
+    }
+
+    // 載入舊有資料
+    protected void reloadAll() {
+        // 假資料
+        // 基本資料
+        getData().putPreference(Config.NAME, "小小兵");
+        getData().putPreference(Config.PHOTO_FILE, "http://4.bp.blogspot.com/-O6vpzzEkhCM/UdT75Pjrt9I/AAAAAAAAkoE/7PCnALll5DA/s1600/20001.jpg");
+        // 朋友資料
+        GenericHelper<Friend> helperFriend = new GenericHelper<Friend>(fd, Friend.class);
+
+        helperFriend.insert(new Friend("0000", "小小兵2號", "http://stars.udn.com/starimages/slide/213834/M_213842-DM2_Minion_Bob_005.jpg", "Y"));
+        helperFriend.insert(new Friend("0001", "海棉寶寶", "http://7.blog.xuite.net/7/9/0/9/17804467/blog_855626/txt/24861275/9.jpg", "N"));
+        helperFriend.insert(new Friend("0002", "派大星", "http://f.blog.xuite.net/f/d/0/1/23861562/blog_2024565/txt/32906143/0.jpg", "N"));
+        helperFriend.close();
     }
 
     @Override
