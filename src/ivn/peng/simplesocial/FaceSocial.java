@@ -25,6 +25,7 @@ import grandroid.action.GoAction;
 import grandroid.cache.ImageCacher;
 import grandroid.cache.lazyloader.ImageLoader;
 import grandroid.database.FaceData;
+import grandroid.database.RawFaceData;
 import grandroid.dialog.CommandPickModel;
 import grandroid.image.ImageUtil;
 import grandroid.image.PhotoAgent;
@@ -50,6 +51,7 @@ public abstract class FaceSocial extends Face {
     ImageLoader loader;
     ImageCacher cacher;
     FaceData fd;
+    RawFaceData rfd;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -61,7 +63,7 @@ public abstract class FaceSocial extends Face {
         da = maker.getDisplayAgent();
         cacher = new ImageCacher(this, Config.DB_NAME_IMAGE);
         loader = new ImageLoader(this, cacher, 0);
-        fd = new FaceData(FaceSocial.this, Config.DB_NAME);
+        fd = new FaceData(this, Config.DB_NAME);
         if (hasMenu()) {
             smenu = new SlidingMenu(this);
             lm_side = smenu.createLeftMenuMaker();
@@ -148,8 +150,8 @@ public abstract class FaceSocial extends Face {
             Log.d(Config.TAG, "load photo from net");
             loader.displayImage(getData().getPreference(Config.PHOTO_FILE), iv_photo, new PhotoHandler() {
                 public void execute(PhotoAgent pa) {
-                    pa.square(1f);
-                    pa.fixSize(330, 330);
+                    pa.square(330f);
+//                    pa.fixSize(330, 330);
                 }
             });
         } else {
@@ -445,10 +447,12 @@ public abstract class FaceSocial extends Face {
 
     private void logout() {
         // 清空所有資料
+        getData().putPreference(Config.IS_LOGIN, "false");
         getData().putPreference(Config.ACCOUNT, "");
         getData().putPreference(Config.PASSWORD, "");
         getData().putPreference(Config.EMAIL, "");
         getData().putPreference(Config.PHOTO_FILE, "");
+        getData().putPreference(Config.PHOTO_URL, "");
         getData().putPreference(Config.NAME, "");
         getData().putPreference(Config.PHOTO_URL, "");
         getData().putPreference(Config.LAST_TARGET, "");

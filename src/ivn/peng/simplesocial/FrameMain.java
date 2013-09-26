@@ -3,6 +3,7 @@ package ivn.peng.simplesocial;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -10,8 +11,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import grandroid.action.GoAction;
-import grandroid.database.FaceData;
 import grandroid.database.GenericHelper;
+import grandroid.database.RawFaceData;
+import java.util.ArrayList;
 import model.Friend;
 
 /**
@@ -45,13 +47,13 @@ public class FrameMain extends FaceSocial {
                 maker.addColLayout(false, maker.layFW(1));
                 {
                     maker.add(createStyliseTextView("帳號", 1, Color.BLACK, Gravity.LEFT | Gravity.BOTTOM), maker.layFW(1));
-                    et_account = maker.add(createStyliseEditView("", 0, Color.BLACK, Gravity.LEFT | Gravity.CENTER), maker.layFW(1));
+                    et_account = maker.add(createStyliseEditView("", 1, Color.BLACK, Gravity.LEFT | Gravity.CENTER), maker.layFW(1));
                     maker.escape();
                 }
                 maker.addColLayout(false, maker.layFW(1)).setGravity(Gravity.CENTER);
                 {
                     maker.add(createStyliseTextView("密碼", 1, Color.BLACK, Gravity.LEFT | Gravity.BOTTOM), maker.layFW(1));
-                    et_password = maker.add(createStyliseEditView("", 0, Color.BLACK, Gravity.LEFT | Gravity.CENTER), maker.layFW(1));
+                    et_password = maker.add(createStyliseEditView("", 1, Color.BLACK, Gravity.LEFT | Gravity.CENTER), maker.layFW(1));
                     maker.escape();
                 }
                 maker.escape();
@@ -127,12 +129,20 @@ public class FrameMain extends FaceSocial {
         getData().putPreference(Config.NAME, "小小兵");
         getData().putPreference(Config.PHOTO_FILE, "http://4.bp.blogspot.com/-O6vpzzEkhCM/UdT75Pjrt9I/AAAAAAAAkoE/7PCnALll5DA/s1600/20001.jpg");
         // 朋友資料
-        GenericHelper<Friend> helperFriend = new GenericHelper<Friend>(fd, Friend.class);
+        rfd = new RawFaceData(FrameMain.this, Config.DB_NAME, true);
+        rfd.startEdit();
+        GenericHelper<Friend> helperFriend = new GenericHelper<Friend>(rfd, Friend.class, true);
+        helperFriend.truncate();
 
-        helperFriend.insert(new Friend("0000", "小小兵2號", "http://stars.udn.com/starimages/slide/213834/M_213842-DM2_Minion_Bob_005.jpg", "Y"));
-        helperFriend.insert(new Friend("0001", "海棉寶寶", "http://7.blog.xuite.net/7/9/0/9/17804467/blog_855626/txt/24861275/9.jpg", "N"));
-        helperFriend.insert(new Friend("0002", "派大星", "http://f.blog.xuite.net/f/d/0/1/23861562/blog_2024565/txt/32906143/0.jpg", "N"));
+        ArrayList<Friend> flist = new ArrayList<Friend>();
+        flist.add(new Friend("0000", "小小兵2號", "http://stars.udn.com/starimages/slide/213834/M_213842-DM2_Minion_Bob_005.jpg", "Y"));
+        flist.add(new Friend("0001", "海棉寶寶", "http://7.blog.xuite.net/7/9/0/9/17804467/blog_855626/txt/24861275/9.jpg", "N"));
+        flist.add(new Friend("0002", "派大星", "http://f.blog.xuite.net/f/d/0/1/23861562/blog_2024565/txt/32906143/0.jpg", "N"));
+
+        helperFriend.insert(flist);
+
         helperFriend.close();
+        rfd.endEdit();
     }
 
     @Override

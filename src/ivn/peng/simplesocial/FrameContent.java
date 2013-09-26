@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import grandroid.action.GoAction;
 import grandroid.adapter.ObjectAdapter;
 import grandroid.database.GenericHelper;
+import grandroid.image.PhotoAgent;
+import grandroid.image.PhotoHandler;
 import java.util.List;
 import model.Friend;
 
@@ -51,18 +53,7 @@ public class FrameContent extends FaceSocial {
             maker.setScalablePadding(maker.getLastLayout(), 50, 50, 50, 50);
             {
                 maker.add(createStyliseTextView("常用聯絡人", 1, Color.BLACK));
-                GridView gv_best = new GridView(this);
-                gv_best.setNumColumns(4);
-                gv_best.setAdapter(createAdapter(list_best));
-                maker.add(gv_best, maker.layFW());
-//                maker.addRowLayout(false, maker.layFW());
-//                {
-//                    ll_content = addBrock(0, 0, 220, 220, Color.GRAY);
-//                    addBrock(0, 0, 220, 220, Color.GRAY);
-//                    addBrock(0, 0, 220, 220, Color.GRAY);
-//                    addBrock(0, 0, 220, 220, Color.GRAY);
-//                    maker.escape();
-//                }
+                maker.add(cretaeGridView(list_best), maker.layFW());
                 maker.escape();
             }
 
@@ -72,24 +63,7 @@ public class FrameContent extends FaceSocial {
             maker.setScalablePadding(maker.getLastLayout(), 50, 50, 50, 50);
             {
                 maker.add(createStyliseTextView("朋友列表", 1, Color.BLACK));
-                GridView gv = new GridView(this);
-                gv.setNumColumns(4);
-                gv.setAdapter(createAdapter(list));
-                maker.add(gv, maker.layFW());
-//                maker.addRowLayout(false, maker.layFW());
-//                {
-//                    addBrock(0, 0, 220, 220, Color.GRAY);
-//                    addBrock(0, 0, 220, 220, Color.GRAY);
-//                    addBrock(0, 0, 220, 220, Color.GRAY);
-//                    addBrock(0, 0, 220, 220, Color.GRAY);
-//                    maker.escape();
-//                }
-//                maker.addRowLayout(false, maker.layFW());
-//                {
-//                    addBrock(0, 0, 220, 220, Color.GRAY);
-//                    addBrock(0, 0, 220, 220, Color.GRAY);
-//                    maker.escape();
-//                }
+                maker.add(cretaeGridView(list), maker.layFW());
                 maker.escape();
             }
             maker.escape();
@@ -101,6 +75,16 @@ public class FrameContent extends FaceSocial {
 //                new GoAction(FrameContent.this, FrameContentInfo.class).addBundleObject("target", "id").setFlag(Intent.FLAG_ACTIVITY_CLEAR_TOP).execute();
 //            }
 //        });
+    }
+
+    private GridView cretaeGridView(List<Friend> list) {
+        GridView gv_best = new GridView(this);
+        gv_best.setNumColumns(4);
+        gv_best.setHorizontalSpacing(2);
+        gv_best.setVerticalSpacing(2);
+        gv_best.setAdapter(createAdapter(list));
+//        gv_best.setOnLongClickListener(null);
+        return gv_best;
     }
 
     private ObjectAdapter<Friend> createAdapter(List<Friend> list) {
@@ -118,6 +102,15 @@ public class FrameContent extends FaceSocial {
                         new GoAction(context, FrameContentInfo.class).addBundleObject("friend", friend.getAccount()).execute();
                     }
                 });
+                iv.setOnLongClickListener(new View.OnLongClickListener() {
+
+                    public boolean onLongClick(View v) {
+                        // 功能選單
+                        //   加為摰有
+                        //   個人資訊
+                        return true;
+                    }
+                });
                 view.addView(iv, maker.layAbsolute(0, 0, 220, 220));
                 return view;
             }
@@ -125,7 +118,13 @@ public class FrameContent extends FaceSocial {
             @Override
             public void fillRowView(int index, View cellRenderer, Friend item) {
                 friend = item;
-                loader.displayImage(item.getUrl(), (ImageView) cellRenderer.findViewWithTag("image"));
+//                loader.displayImage(item.getUrl(), (ImageView) cellRenderer.findViewWithTag("image"));
+                loader.displayImage(item.getUrl(), (ImageView) cellRenderer.findViewWithTag("image"), new PhotoHandler() {
+                    public void execute(PhotoAgent pa) {
+                        pa.square(220f);
+//                        pa.fixSize(220, 220);
+                    }
+                });
             }
         };
         return adapter;

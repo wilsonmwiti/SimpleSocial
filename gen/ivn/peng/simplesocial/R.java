@@ -221,7 +221,7 @@ in (inches), mm (millimeters).
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:behindOffset
+          @attr name ivn.peng.simplesocial:behindOffset
         */
         public static final int SlidingMenu_behindOffset = 3;
         /**
@@ -235,7 +235,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:behindScrollScale
+          @attr name ivn.peng.simplesocial:behindScrollScale
         */
         public static final int SlidingMenu_behindScrollScale = 5;
         /**
@@ -251,7 +251,7 @@ in (inches), mm (millimeters).
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:behindWidth
+          @attr name ivn.peng.simplesocial:behindWidth
         */
         public static final int SlidingMenu_behindWidth = 4;
         /**
@@ -265,7 +265,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:fadeDegree
+          @attr name ivn.peng.simplesocial:fadeDegree
         */
         public static final int SlidingMenu_fadeDegree = 11;
         /**
@@ -279,7 +279,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:fadeEnabled
+          @attr name ivn.peng.simplesocial:fadeEnabled
         */
         public static final int SlidingMenu_fadeEnabled = 10;
         /**
@@ -296,7 +296,7 @@ containing a value of this type.
 <tr><td><code>left</code></td><td>0</td><td></td></tr>
 <tr><td><code>right</code></td><td>1</td><td></td></tr>
 </table>
-          @attr name android:mode
+          @attr name ivn.peng.simplesocial:mode
         */
         public static final int SlidingMenu_mode = 0;
         /**
@@ -306,7 +306,7 @@ containing a value of this type.
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:selectorDrawable
+          @attr name ivn.peng.simplesocial:selectorDrawable
         */
         public static final int SlidingMenu_selectorDrawable = 13;
         /**
@@ -320,7 +320,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:selectorEnabled
+          @attr name ivn.peng.simplesocial:selectorEnabled
         */
         public static final int SlidingMenu_selectorEnabled = 12;
         /**
@@ -330,7 +330,7 @@ containing a value of this type.
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:shadowDrawable
+          @attr name ivn.peng.simplesocial:shadowDrawable
         */
         public static final int SlidingMenu_shadowDrawable = 8;
         /**
@@ -346,7 +346,7 @@ in (inches), mm (millimeters).
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:shadowWidth
+          @attr name ivn.peng.simplesocial:shadowWidth
         */
         public static final int SlidingMenu_shadowWidth = 9;
         /**
@@ -363,7 +363,7 @@ containing a value of this type.
 <tr><td><code>margin</code></td><td>0</td><td></td></tr>
 <tr><td><code>fullscreen</code></td><td>1</td><td></td></tr>
 </table>
-          @attr name android:touchModeAbove
+          @attr name ivn.peng.simplesocial:touchModeAbove
         */
         public static final int SlidingMenu_touchModeAbove = 6;
         /**
@@ -380,7 +380,7 @@ containing a value of this type.
 <tr><td><code>margin</code></td><td>0</td><td></td></tr>
 <tr><td><code>fullscreen</code></td><td>1</td><td></td></tr>
 </table>
-          @attr name android:touchModeBehind
+          @attr name ivn.peng.simplesocial:touchModeBehind
         */
         public static final int SlidingMenu_touchModeBehind = 7;
         /**
@@ -390,7 +390,7 @@ containing a value of this type.
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:viewAbove
+          @attr name ivn.peng.simplesocial:viewAbove
         */
         public static final int SlidingMenu_viewAbove = 1;
         /**
@@ -400,7 +400,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:viewBehind
+          @attr name ivn.peng.simplesocial:viewBehind
         */
         public static final int SlidingMenu_viewBehind = 2;
     };

@@ -100,8 +100,8 @@ public class FrameEdit extends FaceSocial {
             Log.d(Config.TAG, "load photo from net");
             loader.displayImage(getData().getPreference(Config.PHOTO_FILE), photoView, new PhotoHandler() {
                 public void execute(PhotoAgent pa) {
-                    pa.square(1f);
-                    pa.fixSize(660, 660);
+                    pa.square(660f);
+//                    pa.fixSize(660, 660);
                 }
             });
         } else {
