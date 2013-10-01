@@ -19,7 +19,7 @@ import grandroid.database.GenericHelper;
 import grandroid.image.PhotoAgent;
 import grandroid.image.PhotoHandler;
 import java.util.List;
-import model.Friend;
+import ivn.peng.simplesocial.model.Friend;
 
 /**
  * 內頁首頁 顯示所有朋友的大頭像
@@ -40,8 +40,8 @@ public class FrameContent extends FaceSocial {
         list_best = helperFriend.select("WHERE is_best = 'Y'");
         list = helperFriend.select();
 
-        Log.d(Config.TAG, "get best " + list_best.size());
-        Log.d(Config.TAG, "get " + list.size());
+//        Log.d(Config.TAG, "get best " + list_best.size());
+//        Log.d(Config.TAG, "get " + list.size());
         helperFriend.close();
 
         addTopBanner();

@@ -3,8 +3,8 @@ package ivn.peng.simplesocial;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +14,7 @@ import grandroid.action.GoAction;
 import grandroid.database.GenericHelper;
 import grandroid.database.RawFaceData;
 import java.util.ArrayList;
-import model.Friend;
+import ivn.peng.simplesocial.model.Friend;
 
 /**
  * 首頁。 登入 或選擇註冊新帳號
@@ -24,13 +24,14 @@ import model.Friend;
 public class FrameMain extends FaceSocial {
 
     EditText et_account, et_password;
+    Button bn_login;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         LinearLayout ll_register;
-        Button bn_login;
+
         maker.addColLayout(false, maker.layFF()).setGravity(Gravity.CENTER);
         maker.setScalablePadding(maker.getLastLayout(), 50, 50, 50, 50);
         {
@@ -77,7 +78,19 @@ public class FrameMain extends FaceSocial {
         if (getData().getPreference(Config.ACCOUNT) != null && !getData().getPreference(Config.ACCOUNT).equals("")) {
             et_account.setText(getData().getPreference(Config.ACCOUNT));
         }
-
+        et_password.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View view, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                        bn_login.requestFocus();
+                        bn_login.callOnClick();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        
         if (getData().getPreference(Config.IS_LOGIN) != null && getData().getPreference(Config.IS_LOGIN).equals("true")) {
             reloadAll();
             Toast.makeText(this, "已登入", Toast.LENGTH_SHORT).show();

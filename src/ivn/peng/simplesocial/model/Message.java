@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package ivn.peng.simplesocial.model;
 
 import grandroid.database.Identifiable;
 import grandroid.database.Table;
@@ -12,25 +12,14 @@ import grandroid.database.Table;
  * @author Grasea
  */
 @Table("Friend")
-public class Friend implements Identifiable {
+public class Message implements Identifiable {
 
     protected Integer _id;
-    protected String account;//	朋友id	{ String }
+    protected String account;
     protected String name;//姓名	{ String }
     protected String url;//照片url	{ String }
-    protected String is_best;   // Y | N
-
-    public Friend() {
-        super();
-    }
-
-    public Friend(String account, String name, String url, String is_best) {
-        this();
-        this.account = account;
-        this.name = name;
-        this.url = url;
-        this.is_best = is_best;
-    }
+    protected String message;
+    protected String time;  //(yyyy.MM.dd HH.mm)
 
     public Integer get_id() {
         return this._id;
@@ -48,6 +37,22 @@ public class Friend implements Identifiable {
         this.account = account;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
     public String getName() {
         return name;
     }
@@ -63,12 +68,5 @@ public class Friend implements Identifiable {
     public void setUrl(String url) {
         this.url = url;
     }
-
-    public String getIs_best() {
-        return is_best;
-    }
-
-    public void setIs_best(String is_best) {
-        this.is_best = is_best;
-    }
+    
 }
