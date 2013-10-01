@@ -95,15 +95,16 @@ public class FrameEdit extends FaceSocial {
         }
 
         Log.d(Config.TAG, "get photo " + getData().getPreference(Config.PHOTO_FILE));
-        photoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        photoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         if (getData().getPreference(Config.PHOTO_FILE).subSequence(0, 4).equals("http")) {
             Log.d(Config.TAG, "load photo from net");
-            loader.displayImage(getData().getPreference(Config.PHOTO_FILE), photoView, new PhotoHandler() {
-                public void execute(PhotoAgent pa) {
-                    pa.square(660f);
-//                    pa.fixSize(660, 660);
-                }
-            });
+              loader.displayImage(getData().getPreference(Config.PHOTO_FILE), photoView);
+//            loader.displayImage(getData().getPreference(Config.PHOTO_FILE), photoView, new PhotoHandler() {
+//                public void execute(PhotoAgent pa) {
+//                    pa.square(660f);
+////                    pa.fixSize(660, 660);
+//                }
+//            });
         } else {
             Log.d(Config.TAG, "load photo from sdcard");
             try {

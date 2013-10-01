@@ -10,8 +10,8 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 /**
  *
@@ -21,6 +21,7 @@ import android.widget.TextView;
 public class FrameContentInfo extends FaceSocial {
 
     EditText et_msng;
+    ImageView iv_me;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -35,13 +36,15 @@ public class FrameContentInfo extends FaceSocial {
             {
                 maker.addRowLayout(false, maker.layAbsolute(0, 0, 660, LinearLayout.LayoutParams.WRAP_CONTENT));
                 {
-                    addBrock(0, 0, 220, 220, Color.GRAY);
-                    addBrock(0, 0, 220, 220, Color.GRAY);
+//                    addBrock(0, 0, 220, 220, Color.GRAY);
+//                    addBrock(0, 0, 220, 220, Color.GRAY);
                     maker.escape();
                 }
                 maker.addRowLayout(false, maker.layAbsolute(100, 0, 220, 220));
                 {
-                    addBrock(0, 0, 220, 220, Color.RED);
+//                    addBrock(0, 0, 220, 220, Color.RED);
+                    iv_me = maker.addImage(0, maker.layAbsolute(0, 0, 220, 220));
+                    
                     maker.escape();
                 }
                 maker.escape();

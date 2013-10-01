@@ -145,15 +145,16 @@ public abstract class FaceSocial extends Face {
             }
             lm_side.escape();
         }
-        iv_photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        iv_photo.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         if (getData().getPreference(Config.PHOTO_FILE).subSequence(0, 4).equals("http")) {
             Log.d(Config.TAG, "load photo from net");
-            loader.displayImage(getData().getPreference(Config.PHOTO_FILE), iv_photo, new PhotoHandler() {
-                public void execute(PhotoAgent pa) {
-                    pa.square(330f);
-//                    pa.fixSize(330, 330);
-                }
-            });
+            loader.displayImage(getData().getPreference(Config.PHOTO_FILE), iv_photo);
+//            loader.displayImage(getData().getPreference(Config.PHOTO_FILE), iv_photo, new PhotoHandler() {
+//                public void execute(PhotoAgent pa) {
+//                    pa.square(330f);
+////                    pa.fixSize(330, 330);
+//                }
+//            });
         } else {
             Log.d(Config.TAG, "load photo from sdcard");
             try {

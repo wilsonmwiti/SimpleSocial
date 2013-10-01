@@ -95,7 +95,7 @@ public class FrameContent extends FaceSocial {
             public View createRowView(int index, Friend item) {
                 LinearLayout view = new LinearLayout(context);
                 ImageView iv = maker.createImage(ImageView.class, 0);
-                iv.setScaleType(ImageView.ScaleType.CENTER);
+                iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                 iv.setTag("image");
                 iv.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View arg0) {
@@ -103,7 +103,6 @@ public class FrameContent extends FaceSocial {
                     }
                 });
                 iv.setOnLongClickListener(new View.OnLongClickListener() {
-
                     public boolean onLongClick(View v) {
                         // 功能選單
                         //   加為摰有
@@ -118,13 +117,23 @@ public class FrameContent extends FaceSocial {
             @Override
             public void fillRowView(int index, View cellRenderer, Friend item) {
                 friend = item;
-//                loader.displayImage(item.getUrl(), (ImageView) cellRenderer.findViewWithTag("image"));
-                loader.displayImage(item.getUrl(), (ImageView) cellRenderer.findViewWithTag("image"), new PhotoHandler() {
-                    public void execute(PhotoAgent pa) {
-                        pa.square(220f);
-//                        pa.fixSize(220, 220);
-                    }
-                });
+                loader.displayImage(item.getUrl(), (ImageView) cellRenderer.findViewWithTag("image"));
+//                loader.displayImage(item.getUrl(), (ImageView) cellRenderer.findViewWithTag("image"), new PhotoHandler() {
+//                    public void execute(PhotoAgent pa) {
+//                        int size = 220;
+//
+//                        int w = pa.getBitmap().getWidth();
+//                        int h = pa.getBitmap().getHeight();
+//                        Log.d(Config.TAG, "w: " + w + ", h:  " + h);
+//                        float xriat = 0;
+//                        if (w > 220 && h > 220) {
+//                            xriat = w < h ? w / size : h / size;
+//                        }
+//                        pa.fixSize(Math.round(w / xriat), Math.round(h / xriat));
+////                        pa.square(size);
+////                       
+//                    }
+//                });
             }
         };
         return adapter;
