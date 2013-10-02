@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -16,8 +15,6 @@ import android.widget.LinearLayout;
 import grandroid.action.GoAction;
 import grandroid.adapter.ObjectAdapter;
 import grandroid.database.GenericHelper;
-import grandroid.image.PhotoAgent;
-import grandroid.image.PhotoHandler;
 import java.util.List;
 import ivn.peng.simplesocial.model.Friend;
 

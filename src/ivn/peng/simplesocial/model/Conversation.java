@@ -9,7 +9,7 @@ import grandroid.database.Table;
 import org.json.JSONArray;
 
 /**
- * 會話紀錄 包含 account[ name, url] message[ content, time]
+ * 會話紀錄 包含 account[ name, url] message[who, content, time]
  *
  * @author Grasea
  */
@@ -22,6 +22,7 @@ public class Conversation implements Identifiable {
     protected String name;//姓名	{ String }
     protected String url;//照片url	{ String }
     protected JSONArray message;
+    // String message_account // 發出訊息的使用者
 //    protected String message;
 //    protected String time;  //(yyyy.MM.dd HH.mm)
 
@@ -63,6 +64,7 @@ public class Conversation implements Identifiable {
 //    public void setTime(String time) {
 //        this.time = time;
 //    }
+    
     public String getName() {
         return name;
     }

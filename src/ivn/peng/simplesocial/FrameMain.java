@@ -1,8 +1,10 @@
 package ivn.peng.simplesocial;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -10,11 +12,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import grandroid.action.ContextAction;
 import grandroid.action.GoAction;
+import grandroid.action.ThreadAction;
 import grandroid.database.GenericHelper;
 import grandroid.database.RawFaceData;
+import grandroid.json.JSONConverter;
+import grandroid.net.Mon;
 import java.util.ArrayList;
 import ivn.peng.simplesocial.model.Friend;
+import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 首頁。 登入 或選擇註冊新帳號
@@ -90,7 +100,7 @@ public class FrameMain extends FaceSocial {
                 return false;
             }
         });
-        
+
         if (getData().getPreference(Config.IS_LOGIN) != null && getData().getPreference(Config.IS_LOGIN).equals("true")) {
             reloadAll();
             Toast.makeText(this, "已登入", Toast.LENGTH_SHORT).show();
@@ -158,6 +168,60 @@ public class FrameMain extends FaceSocial {
         rfd.endEdit();
     }
 
+//       protected void reloadMessage() {
+//        new ThreadAction(this, "", findStringResourceByName("alert_wait"), new ContextAction(this) {
+//            @Override
+//            public boolean execute(Context cntxt) {
+//                rfd = new RawFaceData(FaceAdasia.this, Config.DB_NAME, true);
+//                rfd.startEdit();
+//                try {
+//                    JSONObject jSONObject;
+//                    jSONObject = new JSONObject(result_message);
+//                    if (jSONObject.getString("message").equals("OK")) {
+//                        JSONArray data = jSONObject.getJSONArray("data");
+//
+//                        helperUsermsng = new GenericHelper<UserMessage>(rfd, UserMessage.class, true);
+//
+//                        // 拿掉一次性資料
+//                        List msngList = helperUsermsng.select("WHERE type <> '3'");
+//                        helperUsermsng.truncate();
+//                        helperUsermsng.insert(msngList);
+//
+//                        if (data.length() >= 1) {
+//                            getData().putPreference(Config.USERMESSAGE_LAST_ID, data.getJSONObject(0).getString("message_id"));
+//                            Log.d(Config.TAG, "get last id " + data.getJSONObject(0).getString("message_id"));
+//                        }
+//                        for (int i = 0; i < data.length(); i++) {
+//                            JSONObject cell = data.getJSONObject(i);
+//                            UserMessage message = JSONConverter.toObject(cell, UserMessage.class);
+//                            helperUsermsng.insert(message);
+//                        }
+//
+//                        Log.d(Config.TAG, "helperUsermsng size " + helperUsermsng.select().size());
+//
+//                        Log.d(Config.TAG, "update message done.");
+//                        helperUsermsng.close();
+//                    } else {
+//                        Log.e(Config.TAG, jSONObject.getString("detail"));
+//                    }
+//                } catch (JSONException ex) {
+//                    Log.e(Config.TAG, "", ex);
+//                }
+//                rfd.endEdit();
+//                return true;
+//            }
+//        }) {
+//            public boolean execute(Context context) {
+//                try {
+//                    result_message = new Mon(Config.URL).put("action", "usermessage.get").put("uid", getData().getPreference(Config.QRCODE)).put("last_id", getData().getPreference(Config.USERMESSAGE_LAST_ID, "")).sendWithError();
+//                    Log.d(Config.TAG, "result_message = " + result_message);
+//                } catch (Exception ex) {
+//                    Log.e(Config.TAG, null, ex);
+//                }
+//                return true;
+//            }
+//        };
+//    }
     @Override
     public boolean hasMenu() {
         return false;

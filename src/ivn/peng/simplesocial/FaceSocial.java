@@ -28,8 +28,6 @@ import grandroid.database.FaceData;
 import grandroid.database.RawFaceData;
 import grandroid.dialog.CommandPickModel;
 import grandroid.image.ImageUtil;
-import grandroid.image.PhotoAgent;
-import grandroid.image.PhotoHandler;
 import grandroid.phone.DisplayAgent;
 import grandroid.slidemenu.SlidingMenu;
 import grandroid.view.Face;
